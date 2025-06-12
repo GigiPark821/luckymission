@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘의 행운 미션</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fff7f9;
+      text-align: center;
+      padding: 2rem;
+      color: #b34d6d;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #cc5c88;
+    }
+    p {
+      font-size: 1rem;
+      color: #b34d6d;
+    }
+    input[type="date"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ffc4d6;
+      margin-top: 1rem;
+      background-color: #ffeef3;
+      color: #b34d6d;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #ffc4d6;
+      color: #70233e;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background-color: #ffaec9;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 2rem;
+    }
+    li {
+      font-size: 1.1rem;
+      margin: 0.3rem 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌸 오늘의 별자리 행운 미션 🌸</h1>
+  <p>날짜를 선택하고 버튼을 누르면 무작위 미션이 생성돼요!</p>
+  <input type="date" id="mission-date" />
+  <br />
+  <button type="button" id="generate-btn">행운 미션 생성</button>
+
+  <ul id="mission-list"></ul>
+
+  <script>
+    const zodiacs = [
+      "양자리", "황소자리", "쌍둥이자리", "게자리", "사자자리", "처녀자리",
+      "천칭자리", "전갈자리", "사수자리", "염소자리", "물병자리", "물고기자리"
+    ];
+
+    const objects = [
+      "티슈", "거울", "검은깨", "데님 셔츠", "청소기", "노란 것", "지갑", "양말",
+      "샌드위치", "종이컵", "문자", "강아지 사진", "고구마", "식물", "엽서", "붕어빵",
+      "사탕", "노래 가사", "창문", "필름 카메라", "와플", "보온병", "우산", "도넛",
+      "빨간 리본", "헬로 키티 스티커", "아이패드", "샴푸", "식기세척기", "노란 풍선",
+      "커튼", "머리핀", "체크무늬 손수건", "회색 모자", "조약돌", "젤리빈", "포스트잇",
+      "수첩", "팔찌", "샌들", "레몬즙", "에코백", "부채", "해시태그", "라벤더 향수"
+    ];
+
+    const actions = [
+      "닦기", "먹기", "입기", "돌리기", "넣기", "벗기", "찍기", "걷기", "찾기", "숨기기",
+      "적기", "던지기", "줍기", "계산하기", "정리하기", "붙이기", "흔들기",
+      "바꾸기", "거절하기", "묶기", "사라지기", "알아보기", "전송하기", "덧붙이기",
+      "끄적이기", "상상하기", "바라보기", "던져놓기", "찾아보기", "털어놓기"
+    ];
+
+    const conditions = [
+      "아침에", "지하에서", "버스 안에서", "방 청소 도중", "말없이", "눈 마주치지 않고",
+      "오늘이 가기 전", "햇빛 아래에서", "편의점 앞에서", "기분 안 좋을 때",
+      "무의식적으로", "약속 장소에 가는 길에", "창가에 앉아서", "혼잣말 하면서",
+      "샤워하기 전에", "잠들기 직전", "카페에 앉아 있을 때", "하늘을 올려다보며",
+      "엘리베이터 안에서", "비 오는 날", "자판기 앞에서", "줄 서 있을 때",
+      "빨래 널며", "노래 들으며", "옆사람 몰래", "눈 감은 채로", "계단을 오르며",
+      "티타임 중에", "벽을 기대며"
+    ];
+
+    function getRandom(seed, array) {
+      const x = Math.sin(seed++) * 10000;
+      return array[Math.floor((x - Math.floor(x)) * array.length)];
+    }
+
+    function generateMissions() {
+      const dateInput = document.getElementById("mission-date");
+      if (!dateInput.value) {
+        alert("날짜를 선택해 주세요!");
+        dateInput.focus();
+        return;
+      }
+
+      const date = new Date(dateInput.value);
+      const seedBase = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
+
+      const ul = document.getElementById("mission-list");
+      ul.innerHTML = "";
+
+      zodiacs.forEach((sign, idx) => {
+        const seed = seedBase + idx;
+        const cond = getRandom(seed + 1, conditions);
+        const obj = getRandom(seed + 2, objects);
+        const act = getRandom(seed + 3, actions);
+        const mission = `${cond} ${obj} ${act}`;
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${sign}</strong>: ${mission}`;
+        ul.appendChild(li);
+      });
+
+      dateInput.blur();
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("generate-btn").addEventListener("click", generateMissions);
+    });
+  </script>
+</body>
+</html>
